@@ -6,8 +6,7 @@
     <title>Social Media Usage Analytics Dashboard | Advanced Analytics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* Global Styles */
         :root {
@@ -48,17 +47,6 @@
             overflow: hidden;
         }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
-            opacity: 0.3;
-        }
-
         .hero-section h1 {
             font-size: 3rem;
             margin-bottom: 20px;
@@ -93,7 +81,6 @@
             text-align: center;
             min-width: 150px;
             transition: transform 0.3s;
-            animation: fadeInUp 0.8s ease 0.2s both;
         }
 
         .stat-card:hover {
@@ -123,12 +110,12 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            transition: transform 0.3s;
+            min-height: 400px;
         }
 
-        .chart-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        .chart-container canvas {
+            max-height: 350px;
+            width: 100% !important;
         }
 
         /* Filter Bar */
@@ -149,6 +136,7 @@
             text-align: center;
             transition: transform 0.3s;
             cursor: pointer;
+            margin-bottom: 20px;
         }
 
         .metric-card:hover {
@@ -167,10 +155,6 @@
 
         .metric-trend.up {
             color: #2ecc71;
-        }
-
-        .metric-trend.down {
-            color: #e74c3c;
         }
 
         /* Segment Cards */
@@ -318,27 +302,11 @@
                 font-size: 1.4rem;
             }
         }
-
-        /* Animations */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .insight-card, .segment-card, .metric-card {
-            animation: slideIn 0.5s ease;
-        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-chart-line"></i> 📱 Social Media Analytics Dashboard
@@ -470,11 +438,11 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="chart-container">
-                        <canvas id="platformChart"></canvas>
+                        <canvas id="platformChart" style="width:100%; height:350px;"></canvas>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">Key Metrics</h5>
                             <ul class="list-unstyled">
@@ -483,6 +451,15 @@
                                 <li><i class="fas fa-edit"></i> 💬 Avg Posts/Week: <strong>5.2</strong></li>
                                 <li><i class="fas fa-heart"></i> ❤️ Avg Engagement: <strong>12.3%</strong></li>
                             </ul>
+                            <hr>
+                            <h6>Platform Ranking</h6>
+                            <ol>
+                                <li>TikTok - 2.8 hrs/day</li>
+                                <li>Instagram - 2.3 hrs/day</li>
+                                <li>Facebook - 1.5 hrs/day</li>
+                                <li>Twitter - 0.8 hrs/day</li>
+                                <li>LinkedIn - 0.5 hrs/day</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
@@ -493,11 +470,12 @@
         <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-chart-line"></i> 📈 Usage Trends Over Time</h2>
             <div class="chart-container">
-                <canvas id="trendChart" height="100"></canvas>
+                <canvas id="trendChart" style="width:100%; height:350px;"></canvas>
             </div>
             <div class="text-center mt-3">
                 <span class="badge bg-info"><i class="fas fa-chart-line"></i> +15% growth in Q4 2024</span>
                 <span class="badge bg-success"><i class="fas fa-clock"></i> Peak season: Summer months</span>
+                <span class="badge bg-warning"><i class="fas fa-chart-line"></i> 12-month upward trend</span>
             </div>
         </section>
 
@@ -507,12 +485,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="chart-container">
-                        <canvas id="ageChart"></canvas>
+                        <h5 class="text-center">Age Group Distribution</h5>
+                        <canvas id="ageChart" style="width:100%; height:300px;"></canvas>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="chart-container">
-                        <canvas id="genderChart"></canvas>
+                        <h5 class="text-center">Gender Distribution</h5>
+                        <canvas id="genderChart" style="width:100%; height:300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -572,7 +552,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         <label class="form-label">Select First Platform</label>
-                        <select id="platform1" class="form-select mb-3">
+                        <select id="platform1" class="form-select mb-3" onchange="updateComparison()">
                             <option value="tiktok">TikTok</option>
                             <option value="instagram">Instagram</option>
                             <option value="facebook">Facebook</option>
@@ -584,7 +564,7 @@
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">Select Second Platform</label>
-                        <select id="platform2" class="form-select mb-3">
+                        <select id="platform2" class="form-select mb-3" onchange="updateComparison()">
                             <option value="instagram">Instagram</option>
                             <option value="tiktok">TikTok</option>
                             <option value="facebook">Facebook</option>
@@ -710,121 +690,129 @@
         <div class="container">
             <p><i class="far fa-copyright"></i> 2024 Social Media Analytics Dashboard. All rights reserved.</p>
             <p>📊 Data source: Analysis of 2,000+ active social media users (Jan-Dec 2024)</p>
-            <p>👨‍💻 Analyzed by: Stat.Richard Otieno | <i class="fab fa-github"></i> <a href="https://github.com/Ndiege75" style="color: white;">GitHub</a> | <i class="fab fa-linkedin"></i> LinkedIn</p>
+            <p>👨‍💻 Analyzed by: Stat.Richard Otieno | <i class="fab fa-github"></i> <a href="https://github.com/Ndiege75" style="color: white;">GitHub</a></p>
             <p><small>Built with <i class="fas fa-heart" style="color: #e74c3c;"></i> using HTML5, CSS3, JavaScript, and Chart.js</small></p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Platform Usage Chart
-        const platformCtx = document.getElementById('platformChart').getContext('2d');
-        new Chart(platformCtx, {
-            type: 'bar',
-            data: {
-                labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
-                datasets: [{
-                    label: 'Average Hours per Day',
-                    data: [2.8, 2.3, 1.5, 0.8, 0.5],
-                    backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'],
-                    borderRadius: 8,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'top', labels: { font: { size: 12 } } },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.raw} hours per day` } }
+        // Wait for page to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Platform Usage Chart (Bar Chart)
+            const platformCtx = document.getElementById('platformChart').getContext('2d');
+            new Chart(platformCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
+                    datasets: [{
+                        label: 'Average Hours per Day',
+                        data: [2.8, 2.3, 1.5, 0.8, 0.5],
+                        backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
                 },
-                scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'Hours per Day' } },
-                    x: { title: { display: true, text: 'Platform' } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { size: 12 } } },
+                        tooltip: { callbacks: { label: function(context) { return context.raw + ' hours per day'; } } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Hours per Day' }, max: 4 },
+                        x: { title: { display: true, text: 'Platform' } }
+                    }
                 }
-            }
-        });
+            });
 
-        // Age Distribution Chart
-        const ageCtx = document.getElementById('ageChart').getContext('2d');
-        new Chart(ageCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['18-24 (25%)', '25-34 (30%)', '35-44 (20%)', '45-54 (12%)', '55+ (8%)'],
-                datasets: [{
-                    data: [25, 30, 20, 12, 8],
-                    backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    title: { display: true, text: 'Age Group Distribution' }
-                }
-            }
-        });
-
-        // Gender Chart
-        const genderCtx = document.getElementById('genderChart').getContext('2d');
-        new Chart(genderCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Female (48%)', 'Male (48%)', 'Non-binary (4%)'],
-                datasets: [{
-                    data: [48, 48, 4],
-                    backgroundColor: ['#e84393', '#3498db', '#f39c12'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    title: { display: true, text: 'Gender Distribution' }
-                }
-            }
-        });
-
-        // Trend Chart
-        const trendCtx = document.getElementById('trendChart').getContext('2d');
-        new Chart(trendCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Daily Active Hours',
-                    data: [4.1, 4.2, 4.3, 4.4, 4.6, 4.8, 5.0, 5.1, 5.0, 4.9, 4.8, 4.7],
-                    borderColor: '#3498db',
-                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#3498db',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.raw} hours per day` } },
-                    legend: { position: 'top' }
+            // 2. Age Distribution Chart (Doughnut)
+            const ageCtx = document.getElementById('ageChart').getContext('2d');
+            new Chart(ageCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['18-24 (25%)', '25-34 (30%)', '35-44 (20%)', '45-54 (12%)', '55+ (8%)'],
+                    datasets: [{
+                        data: [25, 30, 20, 12, 8],
+                        backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'],
+                        borderWidth: 0
+                    }]
                 },
-                scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'Hours per Day' } },
-                    x: { title: { display: true, text: 'Month' } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 11 } } },
+                        tooltip: { callbacks: { label: function(context) { return context.raw + '% of users'; } } }
+                    }
                 }
-            }
-        });
+            });
+
+            // 3. Gender Chart (Pie)
+            const genderCtx = document.getElementById('genderChart').getContext('2d');
+            new Chart(genderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Female (48%)', 'Male (48%)', 'Non-binary (4%)'],
+                    datasets: [{
+                        data: [48, 48, 4],
+                        backgroundColor: ['#e84393', '#3498db', '#f39c12'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 12 } } },
+                        tooltip: { callbacks: { label: function(context) { return context.raw + '% of users'; } } }
+                    }
+                }
+            });
+
+            // 4. Trend Chart (Line)
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Daily Active Hours',
+                        data: [4.1, 4.2, 4.3, 4.4, 4.6, 4.8, 5.0, 5.1, 5.0, 4.9, 4.8, 4.7],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#3498db',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        tooltip: { callbacks: { label: function(context) { return context.raw + ' hours per day'; } } },
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Hours per Day' }, min: 3, max: 6 },
+                        x: { title: { display: true, text: 'Month' } }
+                    }
+                }
+            });
+
+        }); // End DOMContentLoaded
 
         // Platform Data for Comparison
         const platformData = {
             tiktok: { 
-                hours: 2.8, 
+                hours: "2.8", 
                 engagement: "15.2%", 
                 reach: "Very High", 
                 bestFor: "Entertainment",
@@ -832,7 +820,7 @@
                 growth: "+32% YoY"
             },
             instagram: { 
-                hours: 2.3, 
+                hours: "2.3", 
                 engagement: "12.8%", 
                 reach: "High", 
                 bestFor: "Visual Content",
@@ -840,7 +828,7 @@
                 growth: "+18% YoY"
             },
             facebook: { 
-                hours: 1.5, 
+                hours: "1.5", 
                 engagement: "8.4%", 
                 reach: "Very High", 
                 bestFor: "Community",
@@ -849,6 +837,7 @@
             }
         };
 
+        // Update comparison tool
         function updateComparison() {
             const p1 = document.getElementById('platform1').value;
             const p2 = document.getElementById('platform2').value;
@@ -863,4 +852,9 @@
                 <p>🎯 Reach: <strong>${data1.reach}</strong></p>
                 <p>💡 Best For: <strong>${data1.bestFor}</strong></p>
                 <p>👥 Demographics: <strong>${data1.demographics}</strong></p>
-                <p>📈 Growth: <strong>${data1.g
+                <p>📈 Growth: <strong>${data1.growth}</strong></p>
+            `;
+            
+            document.getElementById('platform2-stats').innerHTML = `
+                <h5>${p2.toUpperCase()} Statistics</h5>
+                <p>📱 Daily Hours: <strong>${data
