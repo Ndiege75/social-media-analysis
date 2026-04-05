@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Usage Analytics Dashboard | Complete Analytics Suite</title>
+    <title>Social Media Usage Analytics Dashboard | Real Data Analysis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -77,14 +77,6 @@
         .chart-container:hover { transform: translateY(-5px); }
         .chart-container canvas { max-height: 350px; width: 100% !important; }
         
-        .filter-bar {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
         .metric-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -148,46 +140,41 @@
         .recommendation-item:last-child { border-bottom: none; }
         .recommendation-item .badge { font-size: 1.2rem; padding: 8px 12px; }
         
-        .download-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        
-        .download-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .download-icon { font-size: 3rem; margin-bottom: 15px; }
-        
-        .vs-badge {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        
-        .platform-stats {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-        
         .footer {
             background: var(--dark);
             color: white;
             text-align: center;
             padding: 30px 0;
             margin-top: 50px;
+        }
+        
+        .correlation-table {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            overflow-x: auto;
+        }
+        
+        .correlation-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .correlation-table th, .correlation-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .correlation-table th {
+            background: #3498db;
+            color: white;
+        }
+        
+        .age-table {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
         }
         
         @media (max-width: 768px) {
@@ -203,7 +190,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#"><i class="fas fa-chart-line"></i> 📱 Social Media Analytics Dashboard</a>
+            <a class="navbar-brand" href="#"><i class="fas fa-chart-line"></i> 📱 Social Media Analytics Dashboard 2024</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -212,8 +199,8 @@
                     <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
                     <li class="nav-item"><a class="nav-link" href="#insights">Insights</a></li>
                     <li class="nav-item"><a class="nav-link" href="#segments">Segments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#correlations">Correlations</a></li>
                     <li class="nav-item"><a class="nav-link" href="#recommendations">Recommendations</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#downloads">Downloads</a></li>
                 </ul>
             </div>
         </div>
@@ -223,122 +210,223 @@
     <div class="hero-section">
         <div class="container">
             <h1>📊 Social Media Usage Analytics 2024</h1>
-            <p>Comprehensive analysis of user behavior, platform preferences, and engagement patterns</p>
+            <p>Comprehensive analysis of 2,000+ users: platform preferences, engagement patterns, and demographic insights</p>
             <div class="stats-container">
                 <div class="stat-card"><h3>2,000</h3><p>Users Analyzed</p></div>
-                <div class="stat-card"><h3>4.5</h3><p>Avg Daily Hours</p></div>
+                <div class="stat-card"><h3>6.39</h3><p>Avg Daily Hours</p></div>
                 <div class="stat-card"><h3>5</h3><p>Platforms Tracked</p></div>
                 <div class="stat-card"><h3>4</h3><p>User Segments</p></div>
             </div>
         </div>
     </div>
 
-    <!-- Filter Bar -->
-    <div class="container mt-4">
-        <div class="filter-bar">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label"><i class="fas fa-filter"></i> Platform Filter</label>
-                    <select id="platformFilter" class="form-select" onchange="filterData()">
-                        <option value="all">All Platforms</option>
-                        <option value="tiktok">TikTok</option>
-                        <option value="instagram">Instagram</option>
-                        <option value="facebook">Facebook</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label"><i class="fas fa-users"></i> Age Group</label>
-                    <select id="ageFilter" class="form-select" onchange="filterData()">
-                        <option value="all">All Age Groups</option>
-                        <option value="18-24">18-24 Years</option>
-                        <option value="25-34">25-34 Years</option>
-                        <option value="35+">35+ Years</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label"><i class="fas fa-calendar"></i> Time Range</label>
-                    <select id="timeRange" class="form-select" onchange="filterData()">
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">&nbsp;</label>
-                    <button class="btn btn-primary w-100" onclick="exportReport()"><i class="fas fa-download"></i> Export Report (PDF)</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Enhanced Metric Cards -->
-    <div class="container mt-4">
-        <div class="row g-3">
-            <div class="col-md-3"><div class="metric-card"><div class="metric-icon">📱</div><div class="metric-value">87%</div><div class="metric-label">Daily Active Users</div><div class="metric-trend up"><i class="fas fa-arrow-up"></i> 12% vs last year</div></div></div>
-            <div class="col-md-3"><div class="metric-card"><div class="metric-icon">💬</div><div class="metric-value">342</div><div class="metric-label">Avg Monthly Interactions</div><div class="metric-trend up"><i class="fas fa-arrow-up"></i> 23% growth</div></div></div>
-            <div class="col-md-3"><div class="metric-card"><div class="metric-icon">⏰</div><div class="metric-value">7:30 PM</div><div class="metric-label">Peak Activity Time</div><div class="metric-trend">Prime engagement window</div></div></div>
-            <div class="col-md-3"><div class="metric-card"><div class="metric-icon">📊</div><div class="metric-value">2.4x</div><div class="metric-label">Higher ROI for Video</div><div class="metric-trend up"><i class="fas fa-arrow-up"></i> vs images</div></div></div>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <div class="container mt-5">
-        <!-- Overview Section -->
+        <!-- Platform Overview Section -->
         <section id="overview" class="mb-5">
-            <h2 class="section-title"><i class="fas fa-chart-bar"></i> 📈 Platform Overview</h2>
+            <h2 class="section-title"><i class="fas fa-chart-bar"></i> 📈 Platform Usage Summary</h2>
             <div class="row">
-                <div class="col-md-8"><div class="chart-container"><canvas id="platformChart"></canvas></div></div>
-                <div class="col-md-4"><div class="card h-100"><div class="card-body"><h5 class="card-title">Key Metrics</h5><ul class="list-unstyled"><li><i class="fas fa-chart-line"></i> 📱 Most Active: <strong>TikTok</strong></li><li><i class="fas fa-users"></i> 👥 Peak Age: <strong>18-34</strong></li><li><i class="fas fa-edit"></i> 💬 Avg Posts/Week: <strong>5.2</strong></li><li><i class="fas fa-heart"></i> ❤️ Avg Engagement: <strong>12.3%</strong></li></ul><hr><h6>Platform Ranking</h6><ol><li>TikTok - 2.8 hrs/day</li><li>Instagram - 2.3 hrs/day</li><li>Facebook - 1.5 hrs/day</li><li>Twitter - 0.8 hrs/day</li><li>LinkedIn - 0.5 hrs/day</li></ol></div></div></div>
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <canvas id="platformChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Key Metrics</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-chart-line"></i> 📱 Most Active: <strong>TikTok (1.81 hrs/day)</strong></li>
+                                <li><i class="fas fa-chart-line"></i> 🥈 Second: <strong>Instagram (1.65 hrs/day)</strong></li>
+                                <li><i class="fas fa-chart-line"></i> 🥉 Third: <strong>Facebook (1.41 hrs/day)</strong></li>
+                                <li><i class="fas fa-users"></i> 👥 Peak Age: <strong>25-34 (28.4%)</strong></li>
+                                <li><i class="fas fa-edit"></i> 💬 Primary Platform: <strong>TikTok (34.5%)</strong></li>
+                            </ul>
+                            <hr>
+                            <h6>Platform Ranking (Hours/Day)</h6>
+                            <ol>
+                                <li>TikTok - 1.81 hrs/day</li>
+                                <li>Instagram - 1.65 hrs/day</li>
+                                <li>Facebook - 1.41 hrs/day</li>
+                                <li>Twitter - 0.79 hrs/day</li>
+                                <li>LinkedIn - 0.48 hrs/day</li>
+                            </ol>
+                            <p class="mt-2 text-muted"><small>Total Average: 6.39 hours/day across all platforms</small></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
-
-        <!-- Time Series Trend -->
-        <section class="mb-5">
-            <h2 class="section-title"><i class="fas fa-chart-line"></i> 📈 Usage Trends Over Time</h2>
-            <div class="chart-container"><canvas id="trendChart"></canvas></div>
-            <div class="text-center mt-3"><span class="badge bg-info"><i class="fas fa-chart-line"></i> +15% growth in Q4 2024</span> <span class="badge bg-success"><i class="fas fa-clock"></i> Peak season: Summer months</span> <span class="badge bg-warning"><i class="fas fa-chart-line"></i> 12-month upward trend</span></div>
         </section>
 
         <!-- Demographic Analysis -->
         <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-users"></i> 👥 Demographic Analysis</h2>
             <div class="row">
-                <div class="col-md-6"><div class="chart-container"><h5 class="text-center">Age Group Distribution</h5><canvas id="ageChart"></canvas></div></div>
-                <div class="col-md-6"><div class="chart-container"><h5 class="text-center">Gender Distribution</h5><canvas id="genderChart"></canvas></div></div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="text-center">Age Group Distribution</h5>
+                        <canvas id="ageChart"></canvas>
+                        <div class="text-center mt-2">
+                            <small>Peak age group: 25-34 (28.4%) | Second: 18-24 (25.5%)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="text-center">Gender Distribution</h5>
+                        <canvas id="genderChart"></canvas>
+                        <div class="text-center mt-2">
+                            <small>Male: 48.6% | Female: 47.3% | Non-binary: 4.0%</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Primary Platform Preference -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="fas fa-star"></i> 🎯 Primary Platform Preference</h2>
+            <div class="chart-container">
+                <canvas id="primaryPlatformChart"></canvas>
+            </div>
+            <div class="text-center mt-2">
+                <span class="badge bg-primary">TikTok: 691 users (34.5%)</span>
+                <span class="badge bg-success">Instagram: 556 users (27.8%)</span>
+                <span class="badge bg-warning">Facebook: 496 users (24.8%)</span>
+                <span class="badge bg-info">Twitter: 191 users (9.6%)</span>
+                <span class="badge bg-secondary">LinkedIn: 66 users (3.3%)</span>
+            </div>
+        </section>
+
+        <!-- Average Daily Hours by Age Group -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> 📊 Average Daily Hours by Age Group</h2>
+            <div class="chart-container">
+                <canvas id="ageHoursChart"></canvas>
+            </div>
+            <div class="text-center mt-2">
+                <small>Highest usage: 55+ (6.67 hrs/day) | Lowest: 35-44 (6.23 hrs/day)</small>
+            </div>
+        </section>
+
+        <!-- Platform Correlations -->
+        <section id="correlations" class="mb-5">
+            <h2 class="section-title"><i class="fas fa-link"></i> 🔗 Platform Usage Correlations</h2>
+            <div class="correlation-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th>Platform</th><th>TikTok</th><th>Instagram</th><th>Facebook</th><th>Twitter</th><th>LinkedIn</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>TikTok</strong></td><td>1.000</td><td>0.006</td><td>0.001</td><td>-0.018</td><td>0.010</td></tr>
+                        <tr><td><strong>Instagram</strong></td><td>0.006</td><td>1.000</td><td>0.006</td><td>0.047</td><td>0.047</td></tr>
+                        <tr><td><strong>Facebook</strong></td><td>0.001</td><td>0.006</td><td>1.000</td><td>0.028</td><td>0.028</td></tr>
+                        <tr><td><strong>Twitter</strong></td><td>-0.018</td><td>0.047</td><td>0.028</td><td>1.000</td><td>0.010</td></tr>
+                        <tr><td><strong>LinkedIn</strong></td><td>0.010</td><td>0.047</td><td>0.028</td><td>0.010</td><td>1.000</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-muted mt-2"><small>Note: Weak correlations suggest users tend to specialize in one primary platform rather than using multiple platforms equally.</small></p>
+            </div>
+        </section>
+
+        <!-- Correlation with Total Hours -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> 📈 Correlation with Total Hours</h2>
+            <div class="correlation-table">
+                <table class="table table-striped">
+                    <thead><tr><th>Variable</th><th>Correlation</th><th>Strength</th></tr></thead>
+                    <tbody>
+                        <tr><td>TikTok Hours</td><td>0.566</td><td><span class="badge bg-success">Strong Positive</span></td></tr>
+                        <tr><td>Instagram Hours</td><td>0.548</td><td><span class="badge bg-success">Strong Positive</span></td></tr>
+                        <tr><td>Platform Count</td><td>0.522</td><td><span class="badge bg-success">Strong Positive</span></td></tr>
+                        <tr><td>Facebook Hours</td><td>0.468</td><td><span class="badge bg-info">Moderate Positive</span></td></tr>
+                        <tr><td>Twitter Hours</td><td>0.250</td><td><span class="badge bg-warning">Weak Positive</span></td></tr>
+                        <tr><td>LinkedIn Hours</td><td>0.210</td><td><span class="badge bg-warning">Weak Positive</span></td></tr>
+                    </tbody>
+                </table>
+                <p class="text-muted mt-2"><small>TikTok and Instagram are the strongest drivers of total daily social media usage.</small></p>
             </div>
         </section>
 
         <!-- User Segments -->
         <section id="segments" class="mb-5">
-            <h2 class="section-title"><i class="fas fa-layer-group"></i> 🎯 User Segments</h2>
+            <h2 class="section-title"><i class="fas fa-layer-group"></i> 🎯 User Segments (K-Means Clustering)</h2>
             <div class="row">
-                <div class="col-md-3"><div class="segment-card casual"><i class="fas fa-user" style="font-size: 2rem; color: #3498db;"></i><h4 class="mt-2">Casual Users</h4><p>35% of users</p><p>⏰ 2-3 hours/day</p><p>📊 Low engagement</p><small class="text-muted">Light social media consumers</small></div></div>
-                <div class="col-md-3"><div class="segment-card power"><i class="fas fa-bolt" style="font-size: 2rem; color: #e74c3c;"></i><h4 class="mt-2">Power Users</h4><p>20% of users</p><p>⏰ 8+ hours/day</p><p>📊 High engagement</p><small class="text-muted">Drive 45% of total engagement</small></div></div>
-                <div class="col-md-3"><div class="segment-card creator"><i class="fas fa-video" style="font-size: 2rem; color: #f39c12;"></i><h4 class="mt-2">Content Creators</h4><p>25% of users</p><p>⏰ 5-7 hours/day</p><p>📊 Very High engagement</p><small class="text-muted">Post 15+ items per week</small></div></div>
-                <div class="col-md-3"><div class="segment-card social"><i class="fas fa-share-alt" style="font-size: 2rem; color: #2ecc71;"></i><h4 class="mt-2">Social Butterflies</h4><p>20% of users</p><p>⏰ 4-6 hours/day</p><p>📊 High interaction</p><small class="text-muted">Cross-platform influencers</small></div></div>
-            </div>
-        </section>
-
-        <!-- Platform Comparison Tool -->
-        <section class="mb-5">
-            <h2 class="section-title"><i class="fas fa-balance-scale"></i> 🔄 Platform Comparison Tool</h2>
-            <div class="comparison-tool chart-container">
-                <div class="row">
-                    <div class="col-md-5"><label class="form-label">Select First Platform</label><select id="platform1" class="form-select mb-3" onchange="updateComparison()"><option value="tiktok">TikTok</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option></select><div id="platform1-stats" class="platform-stats"></div></div>
-                    <div class="col-md-2 text-center"><div class="vs-badge">VS</div></div>
-                    <div class="col-md-5"><label class="form-label">Select Second Platform</label><select id="platform2" class="form-select mb-3" onchange="updateComparison()"><option value="instagram">Instagram</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option></select><div id="platform2-stats" class="platform-stats"></div></div>
+                <div class="col-md-3">
+                    <div class="segment-card casual">
+                        <i class="fas fa-user" style="font-size: 2rem; color: #3498db;"></i>
+                        <h4 class="mt-2">Casual Users</h4>
+                        <p>~35% of users</p>
+                        <p>⏰ 2-3 hours/day</p>
+                        <p>📊 Low engagement</p>
+                        <small class="text-muted">Light social media consumers</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="segment-card power">
+                        <i class="fas fa-bolt" style="font-size: 2rem; color: #e74c3c;"></i>
+                        <h4 class="mt-2">Power Users</h4>
+                        <p>~20% of users</p>
+                        <p>⏰ 8+ hours/day</p>
+                        <p>📊 High engagement</p>
+                        <small class="text-muted">Drive 45% of total engagement</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="segment-card creator">
+                        <i class="fas fa-video" style="font-size: 2rem; color: #f39c12;"></i>
+                        <h4 class="mt-2">Content Creators</h4>
+                        <p>~25% of users</p>
+                        <p>⏰ 5-7 hours/day</p>
+                        <p>📊 Very High engagement</p>
+                        <small class="text-muted">Post 15+ items per week</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="segment-card social">
+                        <i class="fas fa-share-alt" style="font-size: 2rem; color: #2ecc71;"></i>
+                        <h4 class="mt-2">Social Butterflies</h4>
+                        <p>~20% of users</p>
+                        <p>⏰ 4-6 hours/day</p>
+                        <p>📊 High interaction</p>
+                        <small class="text-muted">Cross-platform influencers</small>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Insights & Recommendations -->
+        <!-- Key Insights -->
         <section id="insights" class="mb-5">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 💡 Key Insights</h2>
             <div class="row">
-                <div class="col-md-6"><div class="insight-card"><h4><i class="fas fa-chart-line"></i> 📊 Platform Dominance</h4><p>TikTok leads with 2.8 hours/day, followed by Instagram at 2.3 hours/day</p><small class="text-muted">Video content driving engagement</small></div></div>
-                <div class="col-md-6"><div class="insight-card"><h4><i class="fas fa-users"></i> 👥 Age Distribution</h4><p>18-34 age group accounts for 55% of total platform usage</p><small class="text-muted">Millennials and Gen Z dominate</small></div></div>
-                <div class="col-md-6"><div class="insight-card"><h4><i class="fas fa-chart-line"></i> 📈 Engagement Pattern</h4><p>Optimal engagement at 5-7 posts/week, diminishing returns beyond</p><small class="text-muted">Quality over quantity</small></div></div>
-                <div class="col-md-6"><div class="insight-card"><h4><i class="fas fa-link"></i> 🎯 Platform Correlation</h4><p>Strong correlation (0.65) between TikTok and Instagram usage</p><small class="text-muted">Users often use both platforms</small></div></div>
+                <div class="col-md-6">
+                    <div class="insight-card">
+                        <h4><i class="fas fa-chart-line"></i> 📊 Platform Dominance</h4>
+                        <p>TikTok leads with 1.81 hours/day (34.5% primary preference), followed by Instagram at 1.65 hours/day (27.8% primary preference)</p>
+                        <small class="text-muted">Video content driving engagement</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="insight-card">
+                        <h4><i class="fas fa-users"></i> 👥 Age Distribution</h4>
+                        <p>25-34 age group accounts for 28.4% of users, with 18-34 combined representing 53.9% of total platform usage</p>
+                        <small class="text-muted">Millennials and Gen Z dominate</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="insight-card">
+                        <h4><i class="fas fa-chart-line"></i> 📈 Usage by Age</h4>
+                        <p>55+ users show highest daily usage (6.67 hrs/day), while 35-44 show lowest (6.23 hrs/day)</p>
+                        <small class="text-muted">Older users are surprisingly active</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="insight-card">
+                        <h4><i class="fas fa-link"></i> 🎯 Platform Correlation</h4>
+                        <p>Weak correlations between platforms suggest users specialize rather than using multiple platforms equally</p>
+                        <small class="text-muted">Users choose one primary platform</small>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -346,21 +434,11 @@
         <section id="recommendations" class="mb-5">
             <h2 class="section-title"><i class="fas fa-rocket"></i> 🚀 Recommendations</h2>
             <div class="recommendation-list">
-                <div class="recommendation-item"><span class="badge bg-primary">1</span><p><strong>Focus marketing efforts</strong> on TikTok and Instagram for 18-34 demographic</p></div>
-                <div class="recommendation-item"><span class="badge bg-success">2</span><p><strong>Target LinkedIn content</strong> for professionals 35+</p></div>
-                <div class="recommendation-item"><span class="badge bg-info">3</span><p><strong>Optimize posting frequency</strong> to 5-7 posts per week</p></div>
-                <div class="recommendation-item"><span class="badge bg-warning">4</span><p><strong>Engage power users</strong> who drive 60% of conversations</p></div>
-                <div class="recommendation-item"><span class="badge bg-danger">5</span><p><strong>Post during peak hours</strong> (7-9 PM) for maximum reach</p></div>
-            </div>
-        </section>
-
-        <!-- Download Resources -->
-        <section id="downloads" class="mb-5">
-            <h2 class="section-title"><i class="fas fa-download"></i> 📥 Download Resources</h2>
-            <div class="row">
-                <div class="col-md-4"><div class="download-card" onclick="downloadReport()"><div class="download-icon">📊</div><h4>Full Report (PDF)</h4><p>Complete analysis with all charts and insights</p><button class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Download</button></div></div>
-                <div class="col-md-4"><div class="download-card" onclick="downloadCSV()"><div class="download-icon">📈</div><h4>Raw Data (CSV)</h4><p>User-level anonymous data for further analysis</p><button class="btn btn-sm btn-success"><i class="fas fa-download"></i> Download</button></div></div>
-                <div class="col-md-4"><div class="download-card" onclick="downloadPPT()"><div class="download-icon">🎯</div><h4>Recommendations Deck</h4><p>Executive summary slides for stakeholders</p><button class="btn btn-sm btn-info"><i class="fas fa-download"></i> Download</button></div></div>
+                <div class="recommendation-item"><span class="badge bg-primary">1</span><p><strong>Focus marketing efforts</strong> on TikTok and Instagram for 18-34 demographic (53.9% of user base)</p></div>
+                <div class="recommendation-item"><span class="badge bg-success">2</span><p><strong>Target LinkedIn content</strong> for professionals 35+ (40.9% of LinkedIn users are 35+)</p></div>
+                <div class="recommendation-item"><span class="badge bg-info">3</span><p><strong>Leverage TikTok's strong correlation</strong> (0.566 with total hours) for engagement campaigns</p></div>
+                <div class="recommendation-item"><span class="badge bg-warning">4</span><p><strong>Engage power users</strong> who drive 45% of total platform engagement</p></div>
+                <div class="recommendation-item"><span class="badge bg-danger">5</span><p><strong>Don't ignore 55+ segment</strong> - they average 6.67 hours/day, highest among all age groups</p></div>
             </div>
         </section>
 
@@ -368,7 +446,15 @@
         <section class="mb-5">
             <details style="margin-top: 20px; padding: 20px; background: white; border-radius: 15px; cursor: pointer;">
                 <summary style="font-weight: bold; font-size: 1.2rem;"><i class="fas fa-info-circle"></i> 📊 About This Analysis</summary>
-                <div style="margin-top: 15px;"><p><strong>Data Collection:</strong> Data was collected from 2,000 active social media users over a 12-month period (January-December 2024).</p><p><strong>Metrics Tracked:</strong> Daily active hours, platform preference, posting frequency, engagement rates (likes, comments, shares), and follower growth.</p><p><strong>Analysis Methods:</strong> Statistical analysis (ANOVA, t-tests), K-means clustering for user segmentation, time series decomposition, and correlation analysis.</p><p><strong>Tools Used:</strong> Python (Pandas, NumPy, Scikit-learn), R for statistical validation, and Chart.js for visualization.</p><p><strong>Last Updated:</strong> April 2026</p></div>
+                <div style="margin-top: 15px;">
+                    <p><strong>Sample Size:</strong> 2,000 active social media users</p>
+                    <p><strong>Data Collection Period:</strong> January-December 2024 (12 months)</p>
+                    <p><strong>Platforms Tracked:</strong> TikTok, Instagram, Facebook, Twitter, LinkedIn</p>
+                    <p><strong>Analysis Methods:</strong> Statistical analysis, K-means clustering for user segmentation, correlation analysis</p>
+                    <p><strong>Key Metrics:</strong> Daily active hours, platform preference, engagement rates, demographic distribution</p>
+                    <p><strong>Tools Used:</strong> Python (Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn)</p>
+                    <p><strong>Last Updated:</strong> April 2026</p>
+                </div>
             </details>
         </section>
     </div>
@@ -378,105 +464,64 @@
         <div class="container">
             <p><i class="far fa-copyright"></i> 2024 Social Media Analytics Dashboard. All rights reserved.</p>
             <p>📊 Data source: Analysis of 2,000+ active social media users (Jan-Dec 2024)</p>
-            <p>👨‍💻 Analyzed by: Richard Otieno | <i class="fab fa-github"></i> <a href="https://github.com/Ndiege75" style="color: white;">GitHub</a> | <i class="fab fa-linkedin"></i> LinkedIn</p>
-            <p><small>Built with <i class="fas fa-heart" style="color: #e74c3c;"></i> using HTML5, CSS3, JavaScript, and Chart.js</small></p>
+            <p>👨‍💻 Analyzed by: Richard Otieno | <i class="fab fa-github"></i> <a href="https://github.com/Ndiege75" style="color: white;">GitHub</a></p>
+            <p><small>Built with Python, Pandas, Scikit-learn, HTML5, CSS3, JavaScript, and Chart.js</small></p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Chart variables to allow updating
-        let platformChart, trendChart, ageChart, genderChart;
-
-        // Initialize all charts when page loads
         window.addEventListener('load', function() {
-            // Platform Bar Chart
-            platformChart = new Chart(document.getElementById('platformChart'), {
+            // 1. Platform Bar Chart (Updated with real data)
+            new Chart(document.getElementById('platformChart'), {
                 type: 'bar',
                 data: {
                     labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
-                    datasets: [{ label: 'Hours per Day', data: [2.8, 2.3, 1.5, 0.8, 0.5], backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'], borderRadius: 8 }]
+                    datasets: [{ label: 'Hours per Day', data: [1.81, 1.65, 1.41, 0.79, 0.48], backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'], borderRadius: 8 }]
                 },
                 options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
             });
 
-            // Trend Line Chart
-            trendChart = new Chart(document.getElementById('trendChart'), {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{ label: 'Daily Hours', data: [4.1, 4.2, 4.3, 4.4, 4.6, 4.8, 5.0, 5.1, 5.0, 4.9, 4.8, 4.7], borderColor: '#3498db', backgroundColor: 'rgba(52, 152, 219, 0.1)', borderWidth: 3, fill: true, tension: 0.4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true }
-            });
-
-            // Age Doughnut Chart
-            ageChart = new Chart(document.getElementById('ageChart'), {
+            // 2. Age Doughnut Chart (Updated with real data: 25-34:28.4%, 18-24:25.5%, 35-44:20.7%, 45-54:11.8%, 55+:8.4%, 13-17:5.2%)
+            new Chart(document.getElementById('ageChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['18-24 (25%)', '25-34 (30%)', '35-44 (20%)', '45-54 (15%)', '55+ (10%)'],
-                    datasets: [{ data: [25, 30, 20, 15, 10], backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'] }]
+                    labels: ['25-34 (28.4%)', '18-24 (25.5%)', '35-44 (20.7%)', '45-54 (11.8%)', '55+ (8.4%)', '13-17 (5.2%)'],
+                    datasets: [{ data: [28.4, 25.5, 20.7, 11.8, 8.4, 5.2], backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#1abc9c'] }]
                 },
                 options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Gender Pie Chart
-            genderChart = new Chart(document.getElementById('genderChart'), {
+            // 3. Gender Pie Chart (Updated with real data: Male:48.6%, Female:47.3%, Non-binary:4.0%)
+            new Chart(document.getElementById('genderChart'), {
                 type: 'pie',
                 data: {
-                    labels: ['Female (48%)', 'Male (48%)', 'Non-binary (4%)'],
-                    datasets: [{ data: [48, 48, 4], backgroundColor: ['#e84393', '#3498db', '#f39c12'] }]
+                    labels: ['Male (48.6%)', 'Female (47.3%)', 'Non-binary (4.0%)'],
+                    datasets: [{ data: [48.6, 47.3, 4.0], backgroundColor: ['#3498db', '#e84393', '#f39c12'] }]
                 },
                 options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Initialize comparison tool
-            updateComparison();
+            // 4. Primary Platform Preference (Updated: TikTok:691(34.5%), Instagram:556(27.8%), Facebook:496(24.8%), Twitter:191(9.6%), LinkedIn:66(3.3%))
+            new Chart(document.getElementById('primaryPlatformChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
+                    datasets: [{ label: 'Number of Users', data: [691, 556, 496, 191, 66], backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'], borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
+            });
+
+            // 5. Average Daily Hours by Age Group (Updated: 13-17:6.53, 18-24:6.38, 25-34:6.35, 35-44:6.23, 45-54:6.56, 55+:6.67)
+            new Chart(document.getElementById('ageHoursChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['13-17', '18-24', '25-34', '35-44', '45-54', '55+'],
+                    datasets: [{ label: 'Average Hours per Day', data: [6.53, 6.38, 6.35, 6.23, 6.56, 6.67], backgroundColor: '#3498db', borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
+            });
         });
-
-        // Platform Data for Comparison
-        const platformData = {
-            tiktok: { hours: "2.8", engagement: "15.2%", reach: "Very High", bestFor: "Entertainment", demographics: "Gen Z & Millennials", growth: "+32% YoY" },
-            instagram: { hours: "2.3", engagement: "12.8%", reach: "High", bestFor: "Visual Content", demographics: "Millennials", growth: "+18% YoY" },
-            facebook: { hours: "1.5", engagement: "8.4%", reach: "Very High", bestFor: "Community", demographics: "35+ Age Group", growth: "+5% YoY" }
-        };
-
-        function updateComparison() {
-            const p1 = document.getElementById('platform1').value;
-            const p2 = document.getElementById('platform2').value;
-            const data1 = platformData[p1];
-            const data2 = platformData[p2];
-            
-            document.getElementById('platform1-stats').innerHTML = `<h5>${p1.toUpperCase()}</h5><p>📱 Hours: <strong>${data1.hours}</strong></p><p>📊 Engagement: <strong>${data1.engagement}</strong></p><p>🎯 Reach: <strong>${data1.reach}</strong></p><p>💡 Best For: <strong>${data1.bestFor}</strong></p><p>👥 Demographics: <strong>${data1.demographics}</strong></p><p>📈 Growth: <strong>${data1.growth}</strong></p>`;
-            
-            document.getElementById('platform2-stats').innerHTML = `<h5>${p2.toUpperCase()}</h5><p>📱 Hours: <strong>${data2.hours}</strong></p><p>📊 Engagement: <strong>${data2.engagement}</strong></p><p>🎯 Reach: <strong>${data2.reach}</strong></p><p>💡 Best For: <strong>${data2.bestFor}</strong></p><p>👥 Demographics: <strong>${data2.demographics}</strong></p><p>📈 Growth: <strong>${data2.growth}</strong></p>`;
-        }
-
-        function filterData() {
-            const platform = document.getElementById('platformFilter').value;
-            const age = document.getElementById('ageFilter').value;
-            const timeRange = document.getElementById('timeRange').value;
-            
-            let message = `Filter applied: Platform=${platform}, Age=${age}, Time=${timeRange}`;
-            console.log(message);
-            
-            // Show alert for demo purposes
-            if(platform !== 'all' || age !== 'all') {
-                alert(`Filters applied!\n\nPlatform: ${platform}\nAge Group: ${age}\nTime Range: ${timeRange}\n\nCharts would update with filtered data in a production environment.`);
-            }
-        }
-
-        function exportReport() { alert("Generating PDF report...\n\nThis would download a complete PDF report with all charts and insights."); }
-        function downloadCSV() { 
-            const csvData = "Platform,Hours,Engagement,Reach\nTikTok,2.8,15.2%,Very High\nInstagram,2.3,12.8%,High\nFacebook,1.5,8.4%,Very High\nTwitter,0.8,5.2%,Medium\nLinkedIn,0.5,3.1%,Medium";
-            const blob = new Blob([csvData], { type: 'text/csv' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'social_media_analysis_data.csv';
-            link.click();
-        }
-        function downloadPPT() { alert("Preparing Recommendations Deck...\n\nExecutive summary slides would be downloaded here."); }
-        function downloadReport() { alert("Generating Full Report...\n\nComplete analysis report with all visualizations would be downloaded."); }
     </script>
 </body>
 </html>
