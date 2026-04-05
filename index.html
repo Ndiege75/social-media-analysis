@@ -6,7 +6,7 @@
     <title>Social Media Usage Analytics Dashboard | Real Data Analysis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -72,10 +72,15 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 20px;
             transition: transform 0.3s;
+            min-height: 400px;
         }
         
         .chart-container:hover { transform: translateY(-5px); }
-        .chart-container canvas { max-height: 350px; width: 100% !important; }
+        .chart-container canvas { 
+            max-height: 350px; 
+            width: 100% !important;
+            min-height: 300px;
+        }
         
         .metric-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -236,7 +241,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="chart-container">
-                        <canvas id="platformChart"></canvas>
+                        <canvas id="platformChart" style="width:100%; height:350px;"></canvas>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -273,7 +278,7 @@
                 <div class="col-md-6">
                     <div class="chart-container">
                         <h5 class="text-center">Age Group Distribution</h5>
-                        <canvas id="ageChart"></canvas>
+                        <canvas id="ageChart" style="width:100%; height:300px;"></canvas>
                         <div class="text-center mt-2">
                             <small>Peak age group: 25-34 (28.4%) | Second: 18-24 (25.5%)</small>
                         </div>
@@ -282,7 +287,7 @@
                 <div class="col-md-6">
                     <div class="chart-container">
                         <h5 class="text-center">Gender Distribution</h5>
-                        <canvas id="genderChart"></canvas>
+                        <canvas id="genderChart" style="width:100%; height:300px;"></canvas>
                         <div class="text-center mt-2">
                             <small>Male: 48.6% | Female: 47.3% | Non-binary: 4.0%</small>
                         </div>
@@ -295,7 +300,7 @@
         <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-star"></i> 🎯 Primary Platform Preference</h2>
             <div class="chart-container">
-                <canvas id="primaryPlatformChart"></canvas>
+                <canvas id="primaryPlatformChart" style="width:100%; height:350px;"></canvas>
             </div>
             <div class="text-center mt-2">
                 <span class="badge bg-primary">TikTok: 691 users (34.5%)</span>
@@ -310,7 +315,7 @@
         <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-chart-line"></i> 📊 Average Daily Hours by Age Group</h2>
             <div class="chart-container">
-                <canvas id="ageHoursChart"></canvas>
+                <canvas id="ageHoursChart" style="width:100%; height:350px;"></canvas>
             </div>
             <div class="text-center mt-2">
                 <small>Highest usage: 55+ (6.67 hrs/day) | Lowest: 35-44 (6.23 hrs/day)</small>
@@ -529,62 +534,144 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        window.addEventListener('load', function() {
-            // 1. Platform Bar Chart
-            new Chart(document.getElementById('platformChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
-                    datasets: [{ label: 'Hours per Day', data: [1.81, 1.65, 1.41, 0.79, 0.48], backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'], borderRadius: 8 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
-            });
+        // Use setTimeout and DOMContentLoaded to ensure canvas is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure DOM is fully rendered
+            setTimeout(function() {
+                // 1. Platform Bar Chart
+                const platformCanvas = document.getElementById('platformChart');
+                if(platformCanvas) {
+                    new Chart(platformCanvas, {
+                        type: 'bar',
+                        data: {
+                            labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
+                            datasets: [{ 
+                                label: 'Hours per Day', 
+                                data: [1.81, 1.65, 1.41, 0.79, 0.48], 
+                                backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'],
+                                borderWidth: 0,
+                                borderRadius: 8
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: true,
+                            plugins: { 
+                                legend: { position: 'top', labels: { font: { size: 12 } } },
+                                tooltip: { callbacks: { label: function(context) { return context.raw + ' hours/day'; } } }
+                            },
+                            scales: { y: { beginAtZero: true, title: { display: true, text: 'Hours per Day' }, max: 2.5 } }
+                        }
+                    });
+                }
 
-            // 2. Age Doughnut Chart
-            new Chart(document.getElementById('ageChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['25-34 (28.4%)', '18-24 (25.5%)', '35-44 (20.7%)', '45-54 (11.8%)', '55+ (8.4%)', '13-17 (5.2%)'],
-                    datasets: [{ data: [28.4, 25.5, 20.7, 11.8, 8.4, 5.2], backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#1abc9c'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
-            });
+                // 2. Age Doughnut Chart
+                const ageCanvas = document.getElementById('ageChart');
+                if(ageCanvas) {
+                    new Chart(ageCanvas, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['25-34 (28.4%)', '18-24 (25.5%)', '35-44 (20.7%)', '45-54 (11.8%)', '55+ (8.4%)', '13-17 (5.2%)'],
+                            datasets: [{ 
+                                data: [28.4, 25.5, 20.7, 11.8, 8.4, 5.2], 
+                                backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#1abc9c'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: true,
+                            plugins: { 
+                                legend: { position: 'bottom', labels: { font: { size: 11 } } },
+                                tooltip: { callbacks: { label: function(context) { return context.raw + '% of users'; } } }
+                            }
+                        }
+                    });
+                }
 
-            // 3. Gender Pie Chart
-            new Chart(document.getElementById('genderChart'), {
-                type: 'pie',
-                data: {
-                    labels: ['Male (48.6%)', 'Female (47.3%)', 'Non-binary (4.0%)'],
-                    datasets: [{ data: [48.6, 47.3, 4.0], backgroundColor: ['#3498db', '#e84393', '#f39c12'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
-            });
+                // 3. Gender Pie Chart
+                const genderCanvas = document.getElementById('genderChart');
+                if(genderCanvas) {
+                    new Chart(genderCanvas, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Male (48.6%)', 'Female (47.3%)', 'Non-binary (4.0%)'],
+                            datasets: [{ 
+                                data: [48.6, 47.3, 4.0], 
+                                backgroundColor: ['#3498db', '#e84393', '#f39c12'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: true,
+                            plugins: { 
+                                legend: { position: 'bottom', labels: { font: { size: 12 } } },
+                                tooltip: { callbacks: { label: function(context) { return context.raw + '% of users'; } } }
+                            }
+                        }
+                    });
+                }
 
-            // 4. Primary Platform Preference
-            new Chart(document.getElementById('primaryPlatformChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
-                    datasets: [{ label: 'Number of Users', data: [691, 556, 496, 191, 66], backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'], borderRadius: 8 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
-            });
+                // 4. Primary Platform Preference Bar Chart
+                const primaryCanvas = document.getElementById('primaryPlatformChart');
+                if(primaryCanvas) {
+                    new Chart(primaryCanvas, {
+                        type: 'bar',
+                        data: {
+                            labels: ['TikTok', 'Instagram', 'Facebook', 'Twitter', 'LinkedIn'],
+                            datasets: [{ 
+                                label: 'Number of Users', 
+                                data: [691, 556, 496, 191, 66], 
+                                backgroundColor: ['#e74c3c', '#e84393', '#3498db', '#1abc9c', '#f39c12'],
+                                borderWidth: 0,
+                                borderRadius: 8
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: true,
+                            plugins: { 
+                                legend: { position: 'top' },
+                                tooltip: { callbacks: { label: function(context) { return context.raw + ' users'; } } }
+                            },
+                            scales: { y: { beginAtZero: true, title: { display: true, text: 'Number of Users' } } }
+                        }
+                    });
+                }
 
-            // 5. Average Daily Hours by Age Group
-            new Chart(document.getElementById('ageHoursChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['13-17', '18-24', '25-34', '35-44', '45-54', '55+'],
-                    datasets: [{ label: 'Average Hours per Day', data: [6.53, 6.38, 6.35, 6.23, 6.56, 6.67], backgroundColor: '#3498db', borderRadius: 8 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
-            });
+                // 5. Average Daily Hours by Age Group Bar Chart
+                const ageHoursCanvas = document.getElementById('ageHoursChart');
+                if(ageHoursCanvas) {
+                    new Chart(ageHoursCanvas, {
+                        type: 'bar',
+                        data: {
+                            labels: ['13-17', '18-24', '25-34', '35-44', '45-54', '55+'],
+                            datasets: [{ 
+                                label: 'Average Hours per Day', 
+                                data: [6.53, 6.38, 6.35, 6.23, 6.56, 6.67], 
+                                backgroundColor: '#3498db',
+                                borderWidth: 0,
+                                borderRadius: 8
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: true,
+                            plugins: { 
+                                legend: { position: 'top' },
+                                tooltip: { callbacks: { label: function(context) { return context.raw + ' hours/day'; } } }
+                            },
+                            scales: { y: { beginAtZero: true, title: { display: true, text: 'Hours per Day' }, max: 8 } }
+                        }
+                    });
+                }
+            }, 100);
         });
 
         // Download Functions
         function downloadFullReport() {
-            alert("📊 Generating Full Report PDF...\n\nThis would download a complete PDF report with all charts, insights, and recommendations from the analysis.");
-            // In production: window.location.href = '/reports/full_report.pdf';
+            alert("📊 Generating Full Report PDF...\n\nThis would download a complete PDF report with all charts, insights, and recommendations.");
         }
 
         function downloadCSVData() {
@@ -596,68 +683,3 @@ Twitter,0.79,191,9.6%
 LinkedIn,0.48,66,3.3%
 
 Age Group,Percentage,Avg_Hours
-13-17,5.2%,6.53
-18-24,25.5%,6.38
-25-34,28.4%,6.35
-35-44,20.7%,6.23
-45-54,11.8%,6.56
-55+,8.4%,6.67
-
-Gender,Percentage
-Male,48.6%
-Female,47.3%
-Non-binary,4.0%
-
-Correlation_with_Total_Hours
-TikTok,0.566
-Instagram,0.548
-Facebook,0.468
-Twitter,0.250
-LinkedIn,0.210`;
-            
-            const blob = new Blob([csvData], { type: 'text/csv' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'social_media_analysis_data.csv';
-            link.click();
-            alert("✅ CSV file downloaded successfully!");
-        }
-
-        function downloadRecommendations() {
-            alert("🎯 Preparing Recommendations Deck...\n\nThis would download an executive summary presentation with key findings and strategic recommendations.");
-            // In production: window.location.href = '/reports/recommendations.pptx';
-        }
-
-        function downloadSummaryStats() {
-            const statsData = `SOCIAL MEDIA USAGE ANALYSIS - SUMMARY STATISTICS
-=============================================
-
-PLATFORM USAGE (Hours per Day):
-- TikTok: 1.81 hours/day
-- Instagram: 1.65 hours/day
-- Facebook: 1.41 hours/day
-- Twitter: 0.79 hours/day
-- LinkedIn: 0.48 hours/day
-- Total Average: 6.39 hours/day
-
-AGE GROUP DISTRIBUTION:
-- 25-34: 28.4%
-- 18-24: 25.5%
-- 35-44: 20.7%
-- 45-54: 11.8%
-- 55+: 8.4%
-- 13-17: 5.2%
-
-GENDER DISTRIBUTION:
-- Male: 48.6%
-- Female: 47.3%
-- Non-binary: 4.0%
-
-PRIMARY PLATFORM PREFERENCE:
-- TikTok: 691 users (34.5%)
-- Instagram: 556 users (27.8%)
-- Facebook: 496 users (24.8%)
-- Twitter: 191 users (9.6%)
-- LinkedIn: 66 users (3.3%)
-
-AV
