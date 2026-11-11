@@ -6,6 +6,7 @@
     <title>Social Media Usage Analytics Dashboard | Real Data Analysis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -75,7 +76,6 @@
         
         .chart-container:hover { transform: translateY(-5px); }
         
-        /* Simple Bar Chart Styles */
         .bar-chart {
             margin: 20px 0;
         }
@@ -104,7 +104,6 @@
         .bar-twitter { background: linear-gradient(90deg, #1abc9c, #16a085); }
         .bar-linkedin { background: linear-gradient(90deg, #f39c12, #e67e22); }
         
-        /* Simple Donut/Pie Chart */
         .donut-container {
             text-align: center;
             margin: 20px 0;
@@ -245,7 +244,46 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <style>
+    body {
+        visibility: hidden;
+    }
+</style>
+
+<script>
+    const SUPABASE_URL = "https://ydjydxebxwlgaeduewqj.supabase.co/rest/v1/";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_W3zsnforP_jjcrte-ByGYQ_GfrJpMkR";
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+    async function checkAuthentication() {
+        try {
+            const { data, error } =
+                await supabaseClient.auth.getSession();
+
+            if (error || !data.session) {
+                window.location.replace(
+                    "https://ndiege75.github.io/Data-Analyst-Portfolio/auth.html"
+                );
+                return;
+            }
+
+            document.body.style.visibility = "visible";
+
+        } catch (error) {
+            console.error("Authentication check failed:", error);
+
+            window.location.replace(
+                "https://ndiege75.github.io/Data-Analyst-Portfolio/auth.html"
+            );
+        }
+    }
+
+    checkAuthentication();
+</script>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#"><i class="fas fa-chart-line"></i> 📱 Social Media Analytics Dashboard 2024</a>
@@ -260,12 +298,12 @@
                     <li class="nav-item"><a class="nav-link" href="#correlations">Correlations</a></li>
                     <li class="nav-item"><a class="nav-link" href="#recommendations">Recommendations</a></li>
                     <li class="nav-item"><a class="nav-link" href="#downloads">Downloads</a></li>
+                    <li class="nav-item"><button id="logoutBtn" class="logout-btn" type="button">Logout</button></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="hero-section">
         <div class="container">
             <h1>📊 Social Media Usage Analytics 2024</h1>
@@ -279,10 +317,8 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container mt-5">
-        <!-- Platform Overview Section -->
-        <section id="overview" class="mb-5">
+       <section id="overview" class="mb-5">
             <h2 class="section-title"><i class="fas fa-chart-bar"></i> 📈 Platform Usage Summary</h2>
             <div class="row">
                 <div class="col-md-8">
@@ -339,8 +375,7 @@
             </div>
         </section>
 
-        <!-- Demographic Analysis -->
-        <section class="mb-5">
+       <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-users"></i> 👥 Demographic Analysis</h2>
             <div class="row">
                 <div class="col-md-6">
@@ -390,8 +425,7 @@
             </div>
         </section>
 
-        <!-- Primary Platform Preference -->
-        <section class="mb-5">
+       <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-star"></i> 🎯 Primary Platform Preference</h2>
             <div class="chart-container">
                 <h5 class="text-center mb-4">Number of Users by Primary Platform</h5>
@@ -420,7 +454,6 @@
             </div>
         </section>
 
-        <!-- Average Daily Hours by Age Group -->
         <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-chart-line"></i> 📊 Average Daily Hours by Age Group</h2>
             <div class="chart-container">
@@ -455,7 +488,6 @@
             </div>
         </section>
 
-        <!-- Platform Correlations -->
         <section id="correlations" class="mb-5">
             <h2 class="section-title"><i class="fas fa-link"></i> 🔗 Platform Usage Correlations</h2>
             <div class="correlation-table">
@@ -475,7 +507,6 @@
             </div>
         </section>
 
-        <!-- Correlation with Total Hours -->
         <section class="mb-5">
             <h2 class="section-title"><i class="fas fa-chart-line"></i> 📈 Correlation with Total Hours</h2>
             <div class="correlation-table">
@@ -494,7 +525,6 @@
             </div>
         </section>
 
-        <!-- User Segments -->
         <section id="segments" class="mb-5">
             <h2 class="section-title"><i class="fas fa-layer-group"></i> 🎯 User Segments (K-Means Clustering)</h2>
             <div class="row">
@@ -541,7 +571,6 @@
             </div>
         </section>
 
-        <!-- Key Insights -->
         <section id="insights" class="mb-5">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 💡 Key Insights</h2>
             <div class="row">
@@ -576,8 +605,7 @@
             </div>
         </section>
 
-        <!-- Recommendations -->
-        <section id="recommendations" class="mb-5">
+       <section id="recommendations" class="mb-5">
             <h2 class="section-title"><i class="fas fa-rocket"></i> 🚀 Recommendations</h2>
             <div class="recommendation-list">
                 <div class="recommendation-item"><span class="badge bg-primary">1</span><p><strong>Focus marketing efforts</strong> on TikTok and Instagram for 18-34 demographic (53.9% of user base)</p></div>
@@ -588,7 +616,6 @@
             </div>
         </section>
 
-        <!-- Download Resources Section -->
         <section id="downloads" class="mb-5">
             <h2 class="section-title"><i class="fas fa-download"></i> 📥 Download Resources</h2>
             <div class="row">
@@ -636,5 +663,21 @@
                 </div>
             </div>
         </section>
+    <script>
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+            alert("Unable to log out. Please try again.");
+            return;
+        }
+
+        window.location.replace(
+            "https://ndiege75.github.io/Data-Analyst-Portfolio/auth.html"
+        );
+    });
+</script>
+</body>
+</html>
 
         <!--
